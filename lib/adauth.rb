@@ -1,14 +1,16 @@
-require 'net/ldap'
-require 'timeout'
+# Adtools Library
+require 'adtools'
+
+# Adauth Base
 require 'adauth/version'
-require 'adauth/user'
 require 'adauth/config'
+
+# Rails Extensions
 require 'adauth/helpers'
-require 'adauth/connection'
-require 'adauth/group'
-require 'adauth/admin_connection'
-require 'adauth/authenticate'
 require 'adauth/user_model'
+
+# Adauth Functions
+require 'adauth/authenticate'
 
 # The top level module
 #
@@ -25,7 +27,10 @@ module Adauth
     # Configures Adauth and is required for Adauth to work.
     def self.configure
        @config = Config.new
-       yield(@config) 
+       yield(@config)
+       if @config.adtools
+           Adtools::Base.setup(@config.settings_hash)
+       end
     end
     
     # Returns the config object

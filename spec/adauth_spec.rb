@@ -1,5 +1,4 @@
-require 'lib/adauth'
-require 'yaml'
+require 'spec_helper'
 
 describe Adauth, "#configure" do
     it "should accept a block" do
@@ -32,5 +31,19 @@ describe Adauth, "#config" do
     
     it "should set port to 389 if not set" do
         Adauth.config.port.should == 389
+    end
+end
+
+describe Adauth, "#authenticate" do
+    before :each do
+       standard_connection 
+    end
+    
+    it "should authenticate" do
+        Adauth.authenticate(yaml["user"]["login"], yaml["user"]["password"]).should be_a Adtools::User
+    end
+    
+    it "should fail to authenticate if password is wrong" do
+        Adauth.authenticate(yaml["user"]["login"], "password").should be_false
     end
 end
